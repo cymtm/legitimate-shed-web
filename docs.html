@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Docs - Legitimate Shed</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="main-header">
+         <nav class="container">
+            <a href="index.html" class="logo">Legitimate Shed</a>
+            <div class="nav-links">
+                <a href="games.html">Games</a>
+                <a href="apps.html">Apps</a>
+                <a href="about.html">About</a>
+                <a href="docs.html" class="active">Docs</a>
+                <a href="contact.html">Contact</a>
+            </div>
+            <div class="mobile-nav-links">
+                <a href="games.html">Games</a>
+                <a href="apps.html">Apps</a>
+                <a href="about.html">About</a>
+                <a href="docs.html" class="active">Docs</a>
+                <a href="contact.html">Contact</a>
+            </div>
+            <button class="mobile-menu-button">Menu</button>
+        </nav>
+    </header>
+    <main class="container page-content">
+        <div class="page-header">
+            <h1>API Documentation</h1>
+            <p>Standardized codes and conventions for the Legitimate Shed API.</p>
+        </div>
+        <div class="card">
+            <div class="card-header">
+                <h2>Error Codes</h2>
+            </div>
+            <div class="card-content">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Error Code</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>ERROR_NOT_AUTHORIZED</code></td>
+                            <td>User is not authorized to perform the requested action. Check your rules to ensure they are correct.</td>
+                        </tr>
+                        <tr>
+                            <td><code>ERROR_RETRY_LIMIT_EXCEEDED</code></td>
+                            <td>The maximum time limit on an operation (upload, download, delete, etc.) has been exceeded. Try uploading again.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+    <footer class="main-footer">
+        <div class="container">
+            <p>&copy; 2025 Legitimate Shed. All rights reserved.</p>
+        </div>
+    </footer>
+    <script src="script.js"></script>
+</body>
+</html>
