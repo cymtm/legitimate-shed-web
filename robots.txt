@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://cymtm.github.io/legitimate-shed-web/sitemap.xml

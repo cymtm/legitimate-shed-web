@@ -4,41 +4,15 @@ document.addEventListener('DOMContentLoaded', () => {
         games: [
             {
                 slug: "warrenwalker",
-                title: "@cymtm/Warrenwalker",
-                description: "Experience the adventure with Warren Walker, an engaging interactive game experience.",
-                imageUrl: "assets/game-warrenwalker.png",
+                title: "Warrenwalker",
+                description: "Our flagship browser game. Launching soon.",
+                imageUrl: "assets/warrenwalker-card.svg",
                 gameUrl: "games/warrenwalker/index.html",
-            },
-            {
-                slug: "test",
-                title: "Cross-Origin Isolation Test",
-                description: "A test game that verifies cross-origin isolation, SharedArrayBuffer support, and modern web game APIs like pointer lock and fullscreen.",
-                imageUrl: "assets/game-warrenwalker.png", // Reusing image
-                gameUrl: "games/test/index.html",
+                comingSoon: true,
             }
         ],
         apps: [
-            {
-                slug: "task-manager",
-                title: "Task Manager Pro",
-                description: "Organize your tasks and boost productivity with our intuitive task management application.",
-                imageUrl: "assets/app-task-manager.png",
-                appUrl: "apps/task-manager.html", // Placeholder URL
-            },
-            {
-                slug: "color-picker",
-                title: "Color Palette Generator",
-                description: "Generate beautiful color palettes for your design projects with our advanced color picker tool.",
-                imageUrl: "assets/app-color-picker.png",
-                appUrl: "apps/color-picker.html", // Placeholder URL
-            },
-            {
-                slug: "text-formatter",
-                title: "Text Formatter",
-                description: "Format and transform text with various tools including case conversion, word count, and more.",
-                imageUrl: "assets/app-text-formatter.png",
-                appUrl: "apps/text-formatter.html", // Placeholder URL
-            }
+            // No apps yet – add here when ready.
         ]
     };
 
@@ -54,32 +28,46 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Function to create item cards (for games/apps) ---
     const createItemCard = (item, type) => {
-        const url = type === 'game' 
-            ? `game-template.html?slug=${item.slug}` 
+        const isComingSoon = Boolean(item.comingSoon);
+        const url = type === 'game'
+            ? `game-template.html?slug=${item.slug}`
             : `app-template.html?slug=${item.slug}`;
 
-        return `
-            <a href="${url}" class="card item-card">
-                <img src="${item.imageUrl}" alt="${item.title}">
-                <div class="card-header">
-                    <h3>${item.title}</h3>
-                </div>
-                <div class="card-content">
-                    <p>${item.description}</p>
-                </div>
-            </a>
+        const inner = `
+            <img src="${item.imageUrl}" alt="${item.title}">
+            <div class="card-header">
+                <h3>${item.title}</h3>
+            </div>
+            <div class="card-content">
+                <p>${item.description}</p>
+                ${isComingSoon ? '<span class="badge">Coming soon</span>' : ''}
+            </div>
         `;
+
+        if (isComingSoon) {
+            return `<div class="card item-card disabled">${inner}</div>`;
+        }
+
+        return `<a href="${url}" class="card item-card">${inner}</a>`;
     };
 
     // --- Populate Grids ---
     const gamesGrid = document.getElementById('games-grid');
     if (gamesGrid) {
-        gamesGrid.innerHTML = data.games.map(game => createItemCard(game, 'game')).join('');
+        if (data.games.length === 0) {
+            gamesGrid.innerHTML = `<div class="card"><div class="card-content"><p>No games are listed yet.</p></div></div>`;
+        } else {
+            gamesGrid.innerHTML = data.games.map(game => createItemCard(game, 'game')).join('');
+        }
     }
 
     const appsGrid = document.getElementById('apps-grid');
     if (appsGrid) {
-        appsGrid.innerHTML = data.apps.map(app => createItemCard(app, 'app')).join('');
+        if (data.apps.length === 0) {
+            appsGrid.innerHTML = `<div class="card"><div class="card-content"><p>No apps yet. Check back later.</p></div></div>`;
+        } else {
+            appsGrid.innerHTML = data.apps.map(app => createItemCard(app, 'app')).join('');
+        }
     }
 
     // --- Populate Game/App Template Pages ---
@@ -94,8 +82,26 @@ document.addEventListener('DOMContentLoaded', () => {
                 document.getElementById('game-title').textContent = game.title;
                 document.getElementById('game-header-title').textContent = game.title;
                 document.getElementById('game-description').textContent = game.description;
-                document.getElementById('game-iframe').src = game.gameUrl;
-                document.getElementById('open-in-new-tab').href = game.gameUrl;
+
+                const iframe = document.getElementById('game-iframe');
+                const openBtn = document.getElementById('open-in-new-tab');
+
+                if (game.comingSoon) {
+                    // Hide iframe and show coming soon message in its container
+                    if (iframe && iframe.parentElement) {
+                        iframe.parentElement.innerHTML = '<p class="text-center">This game is launching soon. Check back later.</p>';
+                    }
+                    if (openBtn) openBtn.style.display = 'none';
+                } else {
+                    iframe.src = game.gameUrl;
+                    openBtn.href = game.gameUrl;
+                }
+            } else {
+                // Slug not found
+                const container = document.querySelector('main .container') || document.querySelector('main');
+                if (container) {
+                    container.innerHTML = '<div class="card"><div class="card-content"><p>Game not found.</p><a href="games.html" class="button">Back to Games</a></div></div>';
+                }
             }
         } else if (window.location.pathname.includes('app-template')) {
              const app = data.apps.find(a => a.slug === slug);
@@ -104,12 +110,21 @@ document.addEventListener('DOMContentLoaded', () => {
                 document.getElementById('app-title').textContent = app.title;
                 document.getElementById('app-header-title').textContent = app.title;
                 document.getElementById('app-description').textContent = app.description;
-                document.getElementById('app-iframe').src = app.appUrl;
-                document.getElementById('open-in-new-tab').href = app.appUrl;
+                 const iframe = document.getElementById('app-iframe');
+                 const openBtn = document.getElementById('open-in-new-tab');
+                 if (app.comingSoon) {
+                     if (iframe && iframe.parentElement) {
+                         iframe.parentElement.innerHTML = '<p class="text-center">This app is coming soon. Check back later.</p>';
+                     }
+                     if (openBtn) openBtn.style.display = 'none';
+                 } else {
+                     iframe.src = app.appUrl;
+                     openBtn.href = app.appUrl;
+                 }
              }
         }
     }
-    
+
     // --- Contact Form ---
     const contactForm = document.getElementById('contact-form');
     const formToast = document.getElementById('form-toast');
